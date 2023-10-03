@@ -23,55 +23,57 @@ import Login from "views/examples/Login.js";
 import Tables from "views/examples/Tables.js";
 import Icons from "views/examples/Icons.js";
 
+
+
 var routes = [
   {
     path: "/index",
-    name: "Dashboard",
-    icon: "ni ni-tv-2 text-primary",
+    name: "Busqueda",
+    icon: "fa fa-search text-primary",
     component: <Index />,
     layout: "/admin",
   },
   {
-    path: "/icons",
-    name: "Icons",
-    icon: "ni ni-planet text-blue",
+    path: "/upload",
+    name: "Cargar Datos",
+    icon: "fa fa-upload text-blue",
     component: <Icons />,
     layout: "/admin",
   },
   {
-    path: "/maps",
-    name: "Maps",
-    icon: "ni ni-pin-3 text-orange",
+    path: "/investigators",
+    name: "Investigadores",
+    icon: "ni ni-single-02 text-orange",
     component: <Maps />,
     layout: "/admin",
   },
   {
-    path: "/user-profile",
-    name: "User Profile",
-    icon: "ni ni-single-02 text-yellow",
+    path: "/projects",
+    name: "Projectos",
+    icon: "ni ni-app text-yellow",
     component: <Profile />,
     layout: "/admin",
   },
   {
-    path: "/tables",
-    name: "Tables",
-    icon: "ni ni-bullet-list-67 text-red",
+    path: "/publications",
+    name: "Publicaciones",
+    icon: "ni ni-books text-red",
     component: <Tables />,
     layout: "/admin",
   },
   {
-    path: "/login",
-    name: "Login",
-    icon: "ni ni-key-25 text-info",
+    path: "/associate-investigator",
+    name: "Asociar Investigador",
+    icon: "ni ni-ui-04 text-info",
     component: <Login />,
-    layout: "/auth",
+    layout: "/admin",
   },
   {
-    path: "/register",
-    name: "Register",
-    icon: "ni ni-circle-08 text-pink",
+    path: "/associate-article",
+    name: "Asociar Artículo",
+    icon: "ni ni-ui-04 text-pink",
     component: <Register />,
-    layout: "/auth",
+    layout: "/admin",
   },
 ];
 export default routes;

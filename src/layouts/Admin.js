@@ -18,10 +18,8 @@
 import React from "react";
 import { useLocation, Route, Routes, Navigate } from "react-router-dom";
 // reactstrap components
-import { Container } from "reactstrap";
+import { Container, Row } from "reactstrap";
 // core components
-import AdminNavbar from "components/Navbars/AdminNavbar.js";
-import AdminFooter from "components/Footers/AdminFooter.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
 
 import routes from "routes.js";
@@ -67,21 +65,35 @@ const Admin = (props) => {
         routes={routes}
         logo={{
           innerLink: "/admin/index",
-          imgSrc: require("../assets/img/brand/argon-react.png"),
+          imgSrc: require("../assets/img/theme/react.jpg"),
           imgAlt: "...",
         }}
       />
-      <div className="main-content" ref={mainContent}>
-        <AdminNavbar
+      <div className="main-content bg-gradient-default h-100 d-block" ref={mainContent}>
+        {/* <AdminNavbar
           {...props}
           brandText={getBrandText(props?.location?.pathname)}
-        />
-        <Routes>
-          {getRoutes(routes)}
-          <Route path="*" element={<Navigate to="/admin/index" replace />} />
-        </Routes>
-        <Container fluid>
-          <AdminFooter />
+        /> */}
+        {/* <Container>
+            <div className="header-body text-center mb-7">
+              <Row className="justify-content-center">
+                <Col lg="5" md="6">
+                   <h1 className="text-white">Welcome!</h1>
+                  <p className="text-lead text-light">
+                    Use these awesome forms to login or create new account in
+                    your project for free.
+                  </p> 
+                </Col>
+              </Row>
+            </div>
+          </Container> */}
+        <Container className="pb-5">
+          <Row className="justify-content-center">
+            <Routes>
+              {getRoutes(routes)}
+              <Route path="*" element={<Navigate to="/admin/index" replace />} />
+            </Routes>
+          </Row>
         </Container>
       </div>
     </>
