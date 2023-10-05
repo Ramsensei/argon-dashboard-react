@@ -24,6 +24,7 @@ import {
   FormGroup,
   Form, InputGroup, Col
 } from "reactstrap";
+import axios from "axios";
 // core components
 
 const Icons = () => {
@@ -31,10 +32,26 @@ const Icons = () => {
 
   const fileRef = createRef();
 
-  const getFiles = () => {
-    console.log(fileRef.current.files);
-  }
+  const [selectedFiles, setSelectedFiles] = useState([]);
 
+  const handleFileUpload = (event) => {
+    setSelectedFiles(event.target.files);
+  };
+
+  const sendFiles = (event) => {
+    const formData = new FormData();
+    for (let index = 0; index < selectedFiles.length; index++) {
+      formData.append('file', selectedFiles[index]);
+    }
+    console.log(formData);
+    axios.post(process.env.REACT_APP_API_URL + '/upload', formData)
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
     <>
@@ -48,14 +65,14 @@ const Icons = () => {
                     placeholder="Email"
                     multiple
                     type="file"
-                    ref={fileRef}
+                    onChange={handleFileUpload}
                   />
                 </InputGroup>
               </FormGroup>
               <FormGroup>
               </FormGroup>
               <div className="text-center">
-                <Button className="my-4" color="primary" type="button" onClick={getFiles}>
+                <Button className="my-4" color="primary" type="button" onClick={() => {sendFiles(); alert("Datos Cargados")}}>
                   Upload
                 </Button>
               </div>

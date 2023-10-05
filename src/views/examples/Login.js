@@ -18,7 +18,6 @@
 
 // reactstrap components
 import CustomDropdown from "components/Dropdown/Dropdown";
-import { useState } from "react";
 import {
   Button,
   Card,
@@ -27,10 +26,92 @@ import {
   Form,
   Col,
 } from "reactstrap";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const Login = () => {
-  const [investigators, setInvestigators] = useState([{id: 1, name:"Pepe"},{id: 2, name:"Randal"}]);
+  const [investigators, setInvestigators] = useState([]);
+  const [projects, setProjects] = useState([]);
+  const [idInv, setIdInv] = useState(0);
+  const [idPry, setIdPry] = useState(0);
+  useEffect(() => {
+        
+    axios
+        .get(process.env.REACT_APP_API_URL + "/investigadores")
+        .then(function (response) {
+            console.log(response.data[Object.keys(response.data)[1]]);
+            setInvestigators(response.data[Object.keys(response.data)[1]]);
+        })
+        .catch(function (error) {
+            if (error.response) {
+                // GET response with a status code not in range 2xx
+                console.log(error.response.data);
+                console.log(error.response.status);
+                console.log(error.response.headers);
+            } else if (error.request) {
+                // no response
+                console.log(error.request);
+                // instance of XMLHttpRequest in the browser
+                // instance ofhttp.ClientRequest in node.js
+            } else {
+                // Something wrong in setting up the request
+                console.log("Error", error.message);
+            }
+            console.log(error.config);
+        });
+      setTimeout(() => axios
+        .get(process.env.REACT_APP_API_URL + "/proyectos")
+        .then(function (response) {
+            console.log(response.data[Object.keys(response.data)[1]]);
+            setProjects(response.data[Object.keys(response.data)[1]]);
+        })
+        .catch(function (error) {
+            if (error.response) {
+                // GET response with a status code not in range 2xx
+                console.log(error.response.data);
+                console.log(error.response.status);
+                console.log(error.response.headers);
+            } else if (error.request) {
+                // no response
+                console.log(error.request);
+                // instance of XMLHttpRequest in the browser
+                // instance ofhttp.ClientRequest in node.js
+            } else {
+                // Something wrong in setting up the request
+                console.log("Error", error.message);
+            }
+            console.log(error.config);
+        }),1000);
+}, []);
 
+const sendAsignation = () => {
+  axios.post(
+    process.env.REACT_APP_API_URL + `/associar_inv_proy`,
+    {
+      //Body
+      id_pry: idPry,
+      id_inv: idInv,
+    }
+  ).then(function (response) {
+  
+    console.log(response.data);
+    alert("Proyecto asociado a investigador");
+  
+  }).catch(function (error) {
+    if (error.response) { // POST response with a status code not in range 2xx
+      console.log(error.response.data);
+      console.log(error.response.status);
+      console.log(error.response.headers);
+    } else if (error.request) { // no response
+      console.log(error.request);
+      // instance of XMLHttpRequest in the browser
+      // instance ofhttp.ClientRequest in node.js
+    } else { // Something wrong in setting up the request
+      console.log('Error', error.message);
+    }
+    console.log(error.config);
+  });
+}
   return (
     <>
       <Col lg="5" md="7">
@@ -38,13 +119,13 @@ const Login = () => {
           <CardBody className="px-lg-5 py-lg-5">
             <Form role="form">
               <FormGroup className="mb-3">
-                <CustomDropdown title="Investigador" list={investigators}/>
+                <CustomDropdown title="Investigador" list={investigators} setSearch={setIdInv}/>
               </FormGroup>
               <FormGroup className="mb-3">
-                <CustomDropdown title="Projecto" list={investigators}/>
+                <CustomDropdown title="Proyecto" list={projects} setSearch={setIdPry}/>
               </FormGroup>
               <div className="text-center">
-                <Button className="my-4" color="primary" type="button">
+                <Button className="my-4" color="primary" type="button" onClick={sendAsignation}>
                   Asociar
                 </Button>
               </div>

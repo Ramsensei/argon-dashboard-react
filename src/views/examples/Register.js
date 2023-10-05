@@ -17,7 +17,8 @@
 */
 
 import CustomDropdown from "components/Dropdown/Dropdown";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 // reactstrap components
 import {
   Button,
@@ -29,7 +30,89 @@ import {
 } from "reactstrap";
 
 const Register = () => {
-  const [articles, setArticles] = useState([{id:1, name:"Apa"}, {id:2, name:"Yolo"}]);
+  const [articles, setArticles] = useState([]);
+  const [projects, setProjects] = useState([]);
+  const [idPry, setIdPry] = useState(0);
+  const [idPub, setIdPub] = useState(0);
+  useEffect(() => {
+        
+    axios
+        .get(process.env.REACT_APP_API_URL + "/publicaciones")
+        .then(function (response) {
+            console.log(response.data[Object.keys(response.data)[1]]);
+            setArticles(response.data[Object.keys(response.data)[1]]);
+        })
+        .catch(function (error) {
+            if (error.response) {
+                // GET response with a status code not in range 2xx
+                console.log(error.response.data);
+                console.log(error.response.status);
+                console.log(error.response.headers);
+            } else if (error.request) {
+                // no response
+                console.log(error.request);
+                // instance of XMLHttpRequest in the browser
+                // instance ofhttp.ClientRequest in node.js
+            } else {
+                // Something wrong in setting up the request
+                console.log("Error", error.message);
+            }
+            console.log(error.config);
+        });
+      setTimeout(()=> axios
+        .get(process.env.REACT_APP_API_URL + "/proyectos")
+        .then(function (response) {
+            console.log(response.data[Object.keys(response.data)[1]]);
+            setProjects(response.data[Object.keys(response.data)[1]]);
+        })
+        .catch(function (error) {
+            if (error.response) {
+                // GET response with a status code not in range 2xx
+                console.log(error.response.data);
+                console.log(error.response.status);
+                console.log(error.response.headers);
+            } else if (error.request) {
+                // no response
+                console.log(error.request);
+                // instance of XMLHttpRequest in the browser
+                // instance ofhttp.ClientRequest in node.js
+            } else {
+                // Something wrong in setting up the request
+                console.log("Error", error.message);
+            }
+            console.log(error.config);
+        }), 1000);
+}, []);
+
+const sendAsignation = () => {
+  axios.post(
+    process.env.REACT_APP_API_URL + `/associar_pub_proy`,
+    {
+      //Body
+      id_pub: idPub,
+      id_pry: idPry,
+    }
+  ).then(function (response) {
+  
+    console.log(response.data);
+    alert("Articulo asociado a proyecto");
+  
+  }).catch(function (error) {
+    if (error.response) { // POST response with a status code not in range 2xx
+      console.log(error.response.data);
+      console.log(error.response.status);
+      console.log(error.response.headers);
+    } else if (error.request) { // no response
+      console.log(error.request);
+      // instance of XMLHttpRequest in the browser
+      // instance ofhttp.ClientRequest in node.js
+    } else { // Something wrong in setting up the request
+      console.log('Error', error.message);
+    }
+    console.log(error.config);
+  });
+}
+
   return (
     <>
       <Col lg="5" md="7">
@@ -37,13 +120,13 @@ const Register = () => {
           <CardBody className="px-lg-5 py-lg-5">
             <Form role="form">
               <FormGroup className="mb-3">
-                <CustomDropdown title="Articulo" list={articles}/>
+                <CustomDropdown title="Articulo" list={articles} setSearch={setIdPub}/>
               </FormGroup>
               <FormGroup className="mb-3">
-                <CustomDropdown title="Projecto" list={articles}/>
+                <CustomDropdown title="Projecto" list={projects} setSearch={setIdPry}/>
               </FormGroup>
               <div className="text-center">
-                <Button className="my-4" color="primary" type="button">
+                <Button className="my-4" color="primary" type="button" onClick={sendAsignation}>
                   Asociar
                 </Button>
               </div>

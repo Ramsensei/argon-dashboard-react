@@ -74,7 +74,7 @@ const CustomDropdown = ({children, title, list, setSearch}) => {
         </Dropdown.Toggle>
 
         <Dropdown.Menu as={CustomMenu} value={value} className="w-75 overflow-auto" style={{maxHeight: "400%"}}>
-            {list ? list.map((item)=> (<Dropdown.Item key={item.Id} onClick={()=>{setValue(item.name); setSearch(item.Id)}}>{item.name}</Dropdown.Item>)) : ""}
+            {list ? list.map((item,index)=> (<Dropdown.Item key={index} onClick={()=>{setValue(item.name); setSearch(item.Id)}}>{item.name}</Dropdown.Item>)) : ""}
         </Dropdown.Menu>
     </Dropdown>)
 };

@@ -27,6 +27,7 @@ const Index = (props) => {
     const [search, setSearch] = useState();
     const [searchList, setSearchList] = useState();
     const [data, setData] = useState([]);
+    const [knowList, setKnowList] = useState([]);
     const titles = {
         top5Know: "Top 5 Areas de Conocimiento",
         top5Inst: "Top 5 Instituciones",
@@ -44,8 +45,8 @@ const Index = (props) => {
         invs: "/investigadores",
         projects: "/proyectos",
         publi: "/publicaciones",
-        know: "Area de Conocimiento",
-        mates: "Colegas",
+        know: "/proyectos",
+        mates: "/investigadores",
     };
     const labels = {
         top5Know: "Area de Conocimiento",
@@ -75,12 +76,41 @@ const Index = (props) => {
                     break;
                     case "invs":
                         setSearchList(response.data[Object.keys(response.data)[1]]);
+                        setData(response.data[Object.keys(response.data)[1]]);
                     break;
                     case "projects":
                         setSearchList(response.data[Object.keys(response.data)[1]]);
+                        setData(response.data[Object.keys(response.data)[1]]);
                     break;
                     case "publi":
                         setSearchList(response.data[Object.keys(response.data)[1]]);
+                        setData(response.data[Object.keys(response.data)[1]]);
+                    break;
+                    case "projects":
+                        setSearchList(response.data[Object.keys(response.data)[1]]);
+                        setData(response.data[Object.keys(response.data)[1]]);
+                    break;
+                    case "know":
+                        const temp = response.data[Object.keys(response.data)[1]];
+                        const result = [];
+                        let tempId = 0;
+                        for (let index = 0; index < temp.length; index++) {
+                            if (result.filter((item)=> item.name == temp[index]["Area de Conocimiento"]).length == 0){
+                                result.push({
+                                    name: temp[index]["Area de Conocimiento"],
+                                    Id: tempId,
+                                });
+                                tempId += 1;
+                            }
+                        }
+                        console.log(temp)
+                        setSearchList(result);
+                        setData(temp);
+                        setKnowList(temp);
+                    break;
+                    case "mates":
+                        setSearchList(response.data[Object.keys(response.data)[1]]);
+                        setData(response.data[Object.keys(response.data)[1]]);
                     break;
                 }
                 
@@ -107,7 +137,7 @@ const Index = (props) => {
     useEffect(()=>{
         switch(active){
             case "invs":
-                console.log("cambió search");
+                // console.log(search);
                 axios
                     .get(process.env.REACT_APP_API_URL + `/publicaciones_investigador/${search}`)
                     .then(function (response) {
@@ -132,6 +162,51 @@ const Index = (props) => {
                         console.log(error.config);
                     });
             break;
+            case "projects":
+                data.map((item) => {
+                    if (item.Id == search){
+                        setData([item]);
+                    }
+                })
+            break;
+            case "publi":
+                data.map((item) => {
+                    if (item.Id == search){
+                        setData([item]);
+                    }
+                })
+            break;
+            case "know":
+                setData(knowList.filter((item) => 
+                    item["Area de Conocimiento"] == searchList.filter((i) => i.Id == search)[0].name  
+                ));
+            break;
+            case "mates":
+                axios
+                    .get(process.env.REACT_APP_API_URL + `/colegas/${search}`)
+                    .then(function (response) {
+                        console.log(response.data[Object.keys(response.data)[1]]);
+                        setData(response.data[Object.keys(response.data)[1]]);
+                    })
+                    .catch(function (error) {
+                        if (error.response) {
+                            // GET response with a status code not in range 2xx
+                            console.log(error.response.data);
+                            console.log(error.response.status);
+                            console.log(error.response.headers);
+                        } else if (error.request) {
+                            // no response
+                            console.log(error.request);
+                            // instance of XMLHttpRequest in the browser
+                            // instance ofhttp.ClientRequest in node.js
+                        } else {
+                            // Something wrong in setting up the request
+                            console.log("Error", error.message);
+                        }
+                        console.log(error.config);
+                    });
+            break;
+
         }
     }, [search])
     return (
@@ -140,10 +215,10 @@ const Index = (props) => {
                 <Card className="bg-secondary shadow border-0 mt-5">
                     <CardBody className="px-lg-5 py-lg-5">
                         <Form role="form">
-                            {Object.entries(titles).map(([key, value]) => (
+                            {Object.entries(titles).map(([key, value], index) => (
                                 <div
                                     className="custom-control custom-radio mb-3"
-                                    key={key}
+                                    key={index}
                                 >
                                     <input
                                         defaultChecked={
