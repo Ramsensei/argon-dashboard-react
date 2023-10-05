@@ -84,9 +84,13 @@ const Tables = () => {
     const sendData = () => {
         // console.log(search);
         if (search == -1) {
+            const resultadosOrdenados = data.sort((a,b) =>{
+                return Number.parseInt(b.Id) - Number.parseInt(a.Id)
+              })
             axios
                 .post(process.env.REACT_APP_API_URL + `/publicacion`, {
                     //Body
+                    id: resultadosOrdenados[0].Id + 1,
                     nombre: revista,
                     titulo: titulo,
                     anno: anno,

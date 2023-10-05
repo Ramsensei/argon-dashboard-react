@@ -72,7 +72,7 @@ const Icons = () => {
               <FormGroup>
               </FormGroup>
               <div className="text-center">
-                <Button className="my-4" color="primary" type="button" onClick={() => {sendFiles(); alert("Datos Cargados")}}>
+                <Button className="my-4" color="primary" type="button" onClick={() => {sendFiles(); setTimeout(() => alert("Datos Cargados"), 22000)}}>
                   Upload
                 </Button>
               </div>

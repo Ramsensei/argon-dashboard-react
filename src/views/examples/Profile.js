@@ -87,9 +87,13 @@ const Profile = () => {
     const sendData = () => {
         // console.log(search);
         if (search == -1) {
+            const resultadosOrdenados = data.sort((a,b) =>{
+                return Number.parseInt(b.Id) - Number.parseInt(a.Id)
+              })
             axios
                 .post(process.env.REACT_APP_API_URL + `/proyecto`, {
                     //Body
+                    id: resultadosOrdenados[0].Id + 1,
                     titulo: titulo,
                     anno: anno,
                     duracion: duracion,
